@@ -1,0 +1,30 @@
+<div class="panel panel-default">
+	<div class="panel-heading"><strong>Interface ACLs</strong></div>
+		{% if interface_acl %}
+			<table class="table table-hover panel-body attr-table">
+				<tr>
+					<td>Ingress</td>
+					<td><a href="{% url 'plugins:netbox_capirca_plugin:acl' pk=interface_acl.ingress.pk %}">{{ interface_acl.ingress }}</a></td>
+					<td>{{ interface_acl.ingress.description }}</td>
+				</tr>
+				<tr>
+					<td>Egress</td>
+					<td><a href="{% url 'plugins:netbox_capirca_plugin:acl' pk=interface_acl.egress.pk %}">{{ interface_acl.egress }}</a></td>
+					<td>{{ interface_acl.egress.description }}</td>
+				</tr>
+			</table>
+		<div class="panel-body">
+			<div class="pull-right">
+				<a href="{% url 'plugins:netbox_capirca_plugin:acl_interface_assignment_edit' pk=interface_acl.pk %}" class="btn btn-warning"><i class="mdi mdi-pencil"></i>Edit</a>
+			</div>
+		</div>
+		{% else %}
+		<div class="panel-body">
+			No Interface ACLs assigned.
+			<div class="pull-right">
+				<a href="{% url 'plugins:netbox_capirca_plugin:acl_interface_assignment_add' %}?interface_id={{ object.pk }}" class="btn btn-warning"><i class="mdi mdi-plus-thick"></i>Add</a>
+			</div>
+		</div>
+		{% endif %}
+
+</div>

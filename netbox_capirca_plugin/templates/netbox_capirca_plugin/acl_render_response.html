@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load helpers %}
+
+{% block header %}
+<div class="row noprint">
+    <div class="col-12">
+        <ol class="breadcrumb">
+            <li><a href="{% url 'plugins:netbox_capirca_plugin:acl_list' %}">ACLs</a></li>
+            <li>{{ object }}</li>
+        </ol>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-6 col-md-offset-3">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<strong>ACL {{ object.name }}</strong>
+			</div>
+			<pre><code>{{ acl_text }}</code></pre>
+        </div>
+    </div>
+</div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 text-right">
+            {% block buttons %}
+                <a href="{% url 'plugins:netbox_capirca_plugin:acl' pk=object.pk %}" class="btn btn-default">Back</a>
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

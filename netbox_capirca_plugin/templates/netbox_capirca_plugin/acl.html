@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load helpers %}
+
+{% block header %}
+<div class="row noprint">
+    <div class="col-12">
+        <ol class="breadcrumb">
+            <li><a href="{% url 'plugins:netbox_capirca_plugin:acl_list' %}">ACLs</a></li>
+            <li>{{ object }}</li>
+        </ol>
+    </div>
+</div>
+<div class="col-sm">
+    <div class="pull-right">
+    <a href="{% url 'plugins:netbox_capirca_plugin:acl_render' pk=object.pk %}" class="btn btn-primary">
+		<span class="mdi mdi-brush" aria-hidden="true"></span> Render
+    </a>
+    <a href="{% url 'plugins:netbox_capirca_plugin:acl_edit' pk=object.pk %}" class="btn btn-warning">
+		<span class="mdi mdi-pencil" aria-hidden="true"></span> Edit
+    </a>
+    <a href="{% url 'plugins:netbox_capirca_plugin:acl_delete' pk=object.pk %}" class="btn btn-danger">
+		<span class="mdi mdi-trash-can-outline" aria-hidden="true"></span> Delete
+    </a>
+    </div>
+</div>
+<div class="col-sm">
+    <h1>{% block title %}{{ object}}{% endblock %}</h1>
+    <p>
+        <small class="text-muted">Created {{ object.created }} &middot; Updated <span
+                title="{{ object.last_updated }}">{{ object.last_updated|timesince }}</span> ago</small>
+    </p>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-6 col-md-offset-3">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<strong>ACL {{ object.name }}</strong>
+			</div>
+			<table class="table table-hover panel-body attr-table">
+			    <tr>
+					<td>Description</td>
+					<td>{{ object.description }}</td>
+			    </tr>
+			    <tr>
+					<td>Policy Template</td>
+					<td>{{ object.policy_template_path }}</td>
+			    </tr>
+			    <tr>
+					<td>Definitions Template</td>
+					<td>{{ object.static_definitions_dir }}</td>
+			    </tr>
+			    <tr>
+					<td>Networks</td>
+					{% if object.networks %}
+					<td><pre><code>{{ object.networks }}</code></pre></td>
+					{% else %}
+					<td></td>
+					{% endif %}
+			    </tr>
+			    <tr>
+					<td>Services</td>
+					{% if object.services %}
+					<td><pre><code>{{ object.services }}</code></pre></td>
+					{% else %}
+					<td></td>
+					{% endif %}
+			    </tr>
+			    <tr>
+					<td>Terms</td>
+					{% if object.terms %}
+					<td><pre><code>{{ object.terms }}</code></pre></td>
+					{% else %}
+					<td></td>
+					{% endif %}
+			    </tr>
+			</table>
+        	</div>
+        </div>
+</div>
+{% endblock %}

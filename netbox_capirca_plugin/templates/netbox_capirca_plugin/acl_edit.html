@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if object.pk %}
+        Editing ACL - {{ object }}
+    {% else %}
+        Add a new ACL
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<form action="" method="post" enctype="multipart/form-data" class="form form-horizontal">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong>ACL</strong></div>
+                <div class="panel-body">
+                    {% for field in form %}
+					{% if field.name == "networks" %}
+					<div class="pull-right">
+						<button type="button" class="btn btn-xs btn-link" data-toggle="modal" data-target="#networkshelp"><i class="mdi mdi-help-circle"></i></button>
+					</div>
+					{% endif %}
+					{% if field.name == "services" %}
+					<div class="pull-right">
+						<button type="button" class="btn btn-xs btn-link" data-toggle="modal" data-target="#serviceshelp"><i class="mdi mdi-help-circle"></i></button>
+					</div>
+					{% endif %}
+					{% if field.name == "terms" %}
+					<div class="pull-right">
+						<button type="button" class="btn btn-xs btn-link" data-toggle="modal" data-target="#termshelp"><i class="mdi mdi-help-circle"></i></button>
+					</div>
+					{% endif %}
+                    <div class="form-group">
+                        <label class="col-md-3 control-label {% if field.field.required %} required{% endif %}" for="{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+                        <div class="col-md-9">
+                            {{ field }}
+                            {% if field.help_text %}
+                            <span class="help-block">{{ field.help_text|safe }}</span>
+                            {% endif %}
+			        {% if field.errors %}
+    <ul>
+        {% for error in field.errors %}
+        <li class="text-danger">{{ error }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+					{% if form.non_field_errors %}
+					<div class="col-md-9 col-md-offset-3">
+						<ul>
+							{% for error in form.non_field_errors %}
+							<li class="text-danger">{{ error }}</li>
+							{% endfor %}
+						</ul>
+					</div>
+					{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 text-right">
+            {% block buttons %}
+            {% if object.pk %}
+                <button type="submit" name="_update" class="btn btn-primary">Update</button>
+                <a href="{% url 'plugins:netbox_capirca_plugin:acl' pk=object.pk %}" class="btn btn-default">Cancel</a>
+            {% else %}
+                <button type="submit" name="_create" class="btn btn-primary">Create</button>
+				<a href="{% url 'plugins:netbox_capirca_plugin:acl_list' %}" class="btn btn-default">Cancel</a>
+            {% endif %}
+            {% endblock %}
+        </div>
+    </div>
+</form>
+<div class="modal" id="networkshelp" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+		<div class="pull-right">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+        <h5 class="modal-title">Network Definitions Help</h5>
+      </div>
+      <div class="modal-body">
+        <p>A Network Definiton has a label and one or more networks. Further networks can be added on the following lines.</p>
+		<pre><code>EXAMPLE = 192.0.2.0/27
+          2001:db8:123::/64</code></pre>
+		<p>A Network Definition can contain other network definitions</p>
+		<pre><code>EXAMPLE_V4 = 192.0.2.0/27
+EXAMPLE_V6 = 2001:db8:123::/64
+EXAMPLE_DUAL = EXAMPLE_V4
+               EXAMPLE_V6</code></pre>
+		<p>Comments are allowed with a <code>#</code></p>
+		<pre><code>EXAMPLE = 2001:db8:c001:c4t5::/64 # this is a very important comment</code></pre>
+		<p>Further details can be found in the capirca documentation at <a href="https://github.com/google/capirca#network-objects">Github</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="serviceshelp" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+		<div class="pull-right">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+        <h5 class="modal-title">Service Definitions Help</h5>
+      </div>
+      <div class="modal-body">
+        <p>A Service Definition is one or more ports or a range of ports and a protocol (tcp or udp).</p>
+		<pre><code>HTTP = 80/tcp
+DNS = 53/udp 53/tcp</code></pre>
+		<p>Service Definitions can be nested and comments are allowed with a <code>#</code>.</p>
+		<pre><code>HTTP = 80/tcp
+HTTPS = 443/tcp
+WEBPORTS = HTTP HTTPS # the common webserver ports</code></pre>
+		<p>Further details can be found in the capirca documentation at <a href="https://github.com/google/capirca#service-objects">Github</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="termshelp" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+		<div class="pull-right">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+        <h5 class="modal-title">Terms Help</h5>
+      </div>
+      <div class="modal-body">
+		  <p>The Terms are the entries of a ACL. Each term has a name and contains keywords that specify what the term does. Each of the labels (in this case <code>DNS</code>, <code>DNSSERVERS</code>, <code>WEBPORTS</code> and <code>WEBSERVERS</code>) have to be defined first.</p>
+		<pre><code>term allow_dns {
+  comment:: "Allow Traffic to the DNS Servers"
+  destination-port:: DNS
+  destination-address:: DNSSERVERS
+}
+
+term allow_http {
+  comment:: "Allow HTTP and HTTPs to the WEBSERVERS.
+  destination-port:: WEBPORTS
+  destionation-address:: WEBSERVERS
+}</code></pre>
+		<p>A list of the available keywords can be found at <a href="https://github.com/google/capirca#policy-generator">Github</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
