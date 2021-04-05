@@ -68,3 +68,8 @@ header {
 }
 {{ acl.terms }}
 ```
+
+# API
+
+ACLs and ACLInterfaceAssignments can also be managed via the API. The API docs
+can be found where the regular Netbox API docs of your installation are. 
