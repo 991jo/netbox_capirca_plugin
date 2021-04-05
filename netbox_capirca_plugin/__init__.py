@@ -13,7 +13,10 @@ class NetboxACLPluginConfig(PluginConfig):
     required_settings = []
     base_url = "netbox-capirca-plugin"
     default_settings = {}
-    required_settings = ["default_definitions_path", "default_policy_template"]
+    required_settings = ["default_definitions_path",
+                         "default_policy_template",
+                         "definitions_base_path",
+                         "policy_base_path"]
 
 
 config = NetboxACLPluginConfig

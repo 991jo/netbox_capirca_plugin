@@ -21,7 +21,7 @@ generator is relativly easy.
 Install the package in your netbox environment. How to do this depends on
 the way you habe build your netbox environment.
 
-Create a directories for your capirca network and service definitions and
+Create directories for your capirca network and service definitions and
 policy templates.
 
 # Configuration
@@ -31,19 +31,40 @@ Add the plugin to the netbox config.
 PLUGINS = ["netbox_capirca_plugin"]
 ```
 
-This plugin has currently 2 configuration parameters:
+This plugin has there configuration parameters:
 
+* `policy_base_path` - The directory in which the policies are
+* `definitions_base_path` - The directory where the definitions are
 * `default_definitions_path` - The default path for static network and service
-  definitions
-* `default_policy_template` - The default template for policies
+  definitions (relative to `definitions_base_path`)
+* `default_policy_template` - The default template for policies (relative to
+  `policy_base_path`)
 
 In the configuration this looks e.g. like this
 
 ```
 PLUGINS_CONFIG = {
     'netbox_capirca_plugin': {
-        'default_definitions_path': '/opt/capirca/defs/',
-        'default_policy_template': '/opt/capirca/policies/main.pol.j2'
+        'default_definitions_path': 'defs/',
+        'default_policy_template': 'main.pol.j2',
+        'policy_base_path': '/opt/capirca/policies/',
+        'definitions_base_path': '/opt/capirca/',
     }
 }
+```
+
+# Policy-Templates
+
+The policy templates are Jinja2 Templates that are rendered into capirca policy
+files.
+The ACL object can be accessed as `acl` in the template.
+A simple template looks like this:
+
+```
+header {
+	comment:: "{{ acl.description }}"
+	target:: cisco {{ acl.name }} mixed
+	target:: ciscoxr {{ acl.name }} mixed
+}
+{{ acl.terms }}
 ```

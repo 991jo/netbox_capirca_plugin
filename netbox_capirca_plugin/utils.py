@@ -1,4 +1,9 @@
-from capirca.lib.naming import Naming
+from pathlib import Path
+
+from capirca.lib.naming import Naming, UnexpectedDefinitionTypeError
+
+from .exceptions import BasePathEscapeError
+
 
 class NamingWrapper(Naming):
 
@@ -26,3 +31,21 @@ class NamingWrapper(Naming):
             self.ParseServiceList(data)
 
         self._CheckUnseen(def_type)
+
+
+def combine_paths_checked(base: Path, extension: Path) -> str:
+    """
+    Combines the base Path and the extension Path, resolves the paths
+    (handling things like `..`) and checks if the result is still within the
+    base path.
+
+    Returns the combined path.
+    Raises an BasePathEscapeError when the resulting path is no longer inside
+    the base path.
+    """
+
+    combined = base.joinpath(extension).resolve()
+    if base in combined.parents:
+        return str(combined)
+
+    raise BasePathEscapeError(f"{combined} is not a child of {base}")

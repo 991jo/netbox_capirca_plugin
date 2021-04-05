@@ -5,9 +5,10 @@ from django.core.validators import RegexValidator
 from django.urls import reverse
 
 from typing import Callable
+from pathlib import Path
 
-from .utils import NamingWrapper
-from .exceptions import UnsupportedTarget
+from .utils import NamingWrapper, combine_paths_checked
+from .exceptions import UnsupportedTarget, BasePathEscapeError
 from capirca.lib.policy import ParsePolicy
 from capirca.lib.cisco import Cisco
 from capirca.lib.ciscoxr import CiscoXR
@@ -38,7 +39,7 @@ class ACL(ChangeLoggedModel):
         # check that loading the static_definitions_dir works
         if self.static_definitions_dir:
             try:
-                naming = NamingWrapper(self.static_definitions_dir)
+                naming = NamingWrapper(self.get_full_definitions_dir())
             except Exception as e:
                 errors["static_definitions_dir"] = f"Could not verify the static definitions from { self.static_definitions_dir }: { e }"
                 raise ValidationError(errors)
@@ -61,7 +62,7 @@ class ACL(ChangeLoggedModel):
 
         # check the policy template
         try:
-            with open(self.policy_template_path) as f:
+            with open(self.get_full_policy_template_path()) as f:
                 template_text = f.read()
             template = Template(template_text)
             policy_text = template.render(acl=self)
@@ -75,6 +76,32 @@ class ACL(ChangeLoggedModel):
             errors["terms"]= f"Error while parsing policy: { e }"
             raise ValidationError(errors)
 
+    def get_full_definitions_dir(self) -> str:
+        """
+        Returns the complete definitions directory consisting of the base
+        path and the appropriate extension.
+
+        Raises an BasePathEscapeError when the path tries to leave the base
+        path.
+        """
+
+        base_path = Path(settings.PLUGINS_CONFIG["netbox_capirca_plugin"]["definitions_base_path"])
+
+        return combine_paths_checked(base_path, Path(self.static_definitions_dir))
+
+    def get_full_policy_template_path(self) -> str:
+        """
+        Returns the complete policy template path consisting of the base
+        path and the appropriate extension.
+
+        Raises an BasePathEscapeError when the path tries to leave the base
+        path.
+        """
+
+        base_path = Path(settings.PLUGINS_CONFIG["netbox_capirca_plugin"]["policy_base_path"])
+
+        return combine_paths_checked(base_path, Path(self.policy_template_path))
+
 
     def render(self, target=None) -> str:
         """
@@ -83,11 +110,11 @@ class ACL(ChangeLoggedModel):
         target: the name of the capirca target
         """
 
-        naming = NamingWrapper(self.static_definitions_dir)
+        naming = NamingWrapper(self.get_full_definitions_dir())
         naming.add_definitions(self.networks, "networks")
         naming.add_definitions(self.services, "services")
 
-        with open(self.policy_template_path) as f:
+        with open(self.get_full_policy_template_path()) as f:
             template_text = f.read()
         template = Template(template_text)
         policy_text = template.render(acl=self)
