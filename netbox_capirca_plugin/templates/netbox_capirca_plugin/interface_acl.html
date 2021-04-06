@@ -4,13 +4,23 @@
 			<table class="table table-hover panel-body attr-table">
 				<tr>
 					<td>Ingress</td>
+					{% if interface_acl.ingress %}
 					<td><a href="{% url 'plugins:netbox_capirca_plugin:acl' pk=interface_acl.ingress.pk %}">{{ interface_acl.ingress }}</a></td>
 					<td>{{ interface_acl.ingress.description }}</td>
+					{% else %}
+					<td>None</td>
+					<td></td>
+					{% endif %}
 				</tr>
 				<tr>
 					<td>Egress</td>
+					{% if interface_acl.egress %}
 					<td><a href="{% url 'plugins:netbox_capirca_plugin:acl' pk=interface_acl.egress.pk %}">{{ interface_acl.egress }}</a></td>
 					<td>{{ interface_acl.egress.description }}</td>
+					{% else %}
+					<td>None</td>
+					<td></td>
+					{% endif %}
 				</tr>
 			</table>
 		<div class="panel-body">
