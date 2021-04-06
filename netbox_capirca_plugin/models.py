@@ -71,7 +71,8 @@ class ACL(ChangeLoggedModel):
             raise ValidationError(errors)
 
         try:
-            policy = ParsePolicy(policy_text, naming)
+            base_dir = settings.PLUGINS_CONFIG["netbox_capirca_plugin"]["policy_base_path"]
+            policy = ParsePolicy(policy_text, naming, base_dir=base_dir)
         except Exception as e:
             errors["terms"]= f"Error while parsing policy: { e }"
             raise ValidationError(errors)
@@ -119,7 +120,8 @@ class ACL(ChangeLoggedModel):
         template = Template(template_text)
         policy_text = template.render(acl=self)
 
-        policy = ParsePolicy(policy_text, naming)
+        base_dir= settings.PLUGINS_CONFIG["netbox_capirca_plugin"]["policy_base_path"]
+        policy = ParsePolicy(policy_text, naming, base_dir=base_dir)
 
         render_function = self.get_render_function(target)
         return render_function(policy)
