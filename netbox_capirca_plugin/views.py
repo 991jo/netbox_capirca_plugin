@@ -3,17 +3,13 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
 from django.shortcuts import render, get_object_or_404
 from django_tables2 import RequestConfig
-from django.http import HttpResponseRedirect
 from django.conf import settings
-
 
 from .tables import ACLTable
 from .forms import (ACLFilterForm, ACLForm, ACLRenderForm,
                     ACLInterfaceAssignmentForm)
 from .filters import ACLFilter
 from .models import ACL, ACLInterfaceAssignment
-
-from dcim.models import Interface
 
 
 class ACLListView(View):
@@ -53,10 +49,8 @@ class ACLCreateView(CreateView):
 
     def get_initial(self):
         config = settings.PLUGINS_CONFIG["netbox_capirca_plugin"]
-        print(config)
-        return {'static_definitions_dir': '/opt/capirca/defs/',
-                'policy_template_path': '/opt/capirca/policies/main.pol.j2'}
-
+        return {'static_definitions_dir': config["default_definitions_path"],
+                'policy_template_path': config["default_policy_template"]}
 
 
 class ACLEditView(UpdateView):
@@ -122,6 +116,7 @@ class ACLInterfaceAssignmentCreateView(CreateView):
         self.success_url = reverse_lazy("dcim:interface", kwargs={"pk": interface.pk})
 
         return super().form_valid(form)
+
 
 class ACLInterfaceAssignmentEditView(UpdateView):
     model = ACLInterfaceAssignment
