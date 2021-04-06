@@ -1,0 +1,2 @@
+recursive-include netbox_capirca_plugin/templates *
+
