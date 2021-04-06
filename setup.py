@@ -5,7 +5,7 @@ with open('README.md') as f:
 
 setup(
     name='netbox_capirca_plugin',
-    version="0.1.2",
+    version="1.0.0",
     packages=find_packages(),
     url='https://git.belwue.de/ip/belwue_services',
     author='Johannes Erwerle',
