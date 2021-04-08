@@ -186,3 +186,7 @@ tags
 [._]*.un~
 
 # End of https://www.toptal.com/developers/gitignore/api/git,vim,python
+bin
+lib
+lib64
+pyvenv.cfg
