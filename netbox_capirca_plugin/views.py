@@ -83,7 +83,7 @@ class ACLRenderView(View):
 
         form = ACLRenderForm(acl_object, request.POST)
         if form.is_valid():
-            acl_text = acl_object.render(form.cleaned_data["target"])
+            acl_text = acl_object.render(form.cleaned_data["target"], form.cleaned_data["options"])
 
             return render(request,
                           "netbox_capirca_plugin/acl_render_response.html",

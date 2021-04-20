@@ -28,6 +28,7 @@ class ACLForm(BootstrapMixin, forms.ModelForm):
 class ACLRenderForm(BootstrapMixin, forms.Form):
 
     target = forms.CharField(required=True)
+    options = forms.CharField(required=True)
 
     def __init__(self, acl, *args, **kwargs):
         super(forms.Form, self).__init__(*args, **kwargs)
@@ -41,7 +42,7 @@ class ACLRenderForm(BootstrapMixin, forms.Form):
             self.add_error("target", f"target { self.cleaned_data['target'] } is not supported")
 
     class Meta:
-        fields = ["target"]
+        fields = ["target", "options"]
 
 class ACLInterfaceAssignmentForm(BootstrapMixin, forms.ModelForm):
 

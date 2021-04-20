@@ -58,13 +58,35 @@ PLUGINS_CONFIG = {
 The policy templates are Jinja2 Templates that are rendered into capirca policy
 files.
 The ACL object can be accessed as `acl` in the template.
+The important keys of the ACL object are `name`, `description` and `terms`.
+There is also the `target` and `options` variables.
+They specify for which capirca target and with options this ACL has to be
+rendered. To render a ACL for IPv4 you usually have to supply the option
+`inet4` (except for `standard`/`extended` for cisco) or `inet6` for IPv6.
 A simple template looks like this:
 
 ```
 header {
 	comment:: "{{ acl.description }}"
-	target:: cisco {{ acl.name }} mixed
-	target:: ciscoxr {{ acl.name }} mixed
+	target:: {{ target }} {{ acl.name }} {{ options }}
+}
+{{ acl.terms }}
+```
+
+## Handling unique ACL names on cisco IOS
+
+Cisco ACL names have to be unique. This means that if there is an extended ACL
+called `foo` there can't be a IPv6 ACL called `foo`.
+A trick to get around this limitation is to give the resulting ipv6 ACL a
+slightly different name, e.g. `ipv6-foo`. This can be done in the template like
+this:
+
+```
+header {
+        comment:: "{{ acl.description }}"
+        {% if target %}
+        target:: {{ target }} {% if "inet6" in options and target in ["cisco", "ciscoxr", "ciscoasa"]%}ipv6-{% endif %}{{ acl.name }} {{ options }}
+        {% endif %}
 }
 {{ acl.terms }}
 ```
