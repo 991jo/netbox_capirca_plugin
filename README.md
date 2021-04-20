@@ -16,6 +16,14 @@ ACLs can be rendered with the capirca generators. Currently only Cisco IOS and
 IOS XR are supported. If you need more, just add an issue. Supporting an other
 generator is relativly easy.
 
+# Screenshots
+
+![ACL Overview](docs/ACL-overview.png)
+![ACL edit](docs/ACL-edit.png)
+![ACL error](docs/ACL-error.png)
+![ACL rendered](docs/ACL-renderd.png)
+![Interface Assignment](docs/Interface-assignment-overview.png)
+
 # Installation
 
 Install the package in your netbox environment. How to do this depends on
