@@ -15,7 +15,11 @@ from capirca.lib.cisco import Cisco
 from capirca.lib.ciscoxr import CiscoXR
 from jinja2 import Template
 
-from netbox.models import ChangeLoggedModel
+try:
+    from netbox.models import ChangeLoggedModel
+except ModuleNotFoundError:
+    from extras.models import ChangeLoggedModel
+
 from dcim.models import Interface
 
 
