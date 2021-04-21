@@ -3,5 +3,5 @@ from .views import ACLViewSet, ACLInterfaceAssignmentViewSet
 
 router = routers.DefaultRouter()
 router.register("acls", ACLViewSet)
-router.register("acls-interfacea-assignments", ACLInterfaceAssignmentViewSet)
+router.register("acls-interface-assignments", ACLInterfaceAssignmentViewSet)
 urlpatterns = router.urls
