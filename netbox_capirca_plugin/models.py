@@ -35,12 +35,15 @@ class ACL(ChangeLoggedModel):
 
     description = models.CharField(max_length=255, blank=True)
 
+    def build_base_naming(self):
+        return NamingWrapper(settings.PLUGINS_CONFIG["netbox_capirca_plugin"]["definitions_path"])
+
     def clean(self):
         super().clean()
 
         errors = dict()
 
-        naming = NamingWrapper(settings.PLUGINS_CONFIG["netbox_capirca_plugin"]["definitions_path"])
+        naming = self.build_base_naming()
 
         # check that adding the network definitions works
         try:
@@ -93,7 +96,7 @@ class ACL(ChangeLoggedModel):
         target: the name of the capirca target
         """
 
-        naming = NamingWrapper(settings.PLUGINS_CONFIG["netbox_capirca_plugin"]["definitions_path"])
+        naming = self.build_base_naming()
         naming.add_definitions(self.networks, "networks")
         naming.add_definitions(self.services, "services")
 
