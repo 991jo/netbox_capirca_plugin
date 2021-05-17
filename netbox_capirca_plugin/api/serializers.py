@@ -11,7 +11,7 @@ class ACLSerializer(ModelSerializer):
     class Meta:
         model = ACL
         fields = ("id", "name", "description", "networks", "services",
-                  "terms", "static_definitions_dir", "policy_template_path")
+                  "terms", "policy_template_path")
 
 
 class NestedACLSerializer(WritableNestedSerializer):

@@ -49,8 +49,7 @@ class ACLCreateView(CreateView):
 
     def get_initial(self):
         config = settings.PLUGINS_CONFIG["netbox_capirca_plugin"]
-        return {'static_definitions_dir': config["default_definitions_path"],
-                'policy_template_path': config["default_policy_template"]}
+        return {'policy_template_path': config["default_policy_template"]}
 
 
 class ACLEditView(UpdateView):

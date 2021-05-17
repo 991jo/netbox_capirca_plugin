@@ -9,7 +9,6 @@ class ACLFilterForm(BootstrapMixin, forms.ModelForm):
 
     name = forms.CharField(required=False)
     description = forms.CharField(required=False)
-    static_definitions_dir = forms.CharField(required=False)
     policy_template_path = forms.CharField(required=False)
 
     class Meta:
@@ -18,12 +17,11 @@ class ACLFilterForm(BootstrapMixin, forms.ModelForm):
 
 class ACLForm(BootstrapMixin, forms.ModelForm):
 
-    static_definitions_dir = forms.CharField()
     policy_template_path = forms.CharField()
 
     class Meta:
         model = ACL
-        fields = ["name", "description", "static_definitions_dir", "policy_template_path", "networks", "services", "terms"]
+        fields = ["name", "description", "policy_template_path", "networks", "services", "terms"]
 
 class ACLRenderForm(BootstrapMixin, forms.Form):
 

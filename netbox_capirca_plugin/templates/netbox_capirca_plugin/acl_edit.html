@@ -20,11 +20,13 @@
 					{% if field.name == "networks" %}
 					<div class="pull-right">
 						<button type="button" class="btn btn-xs btn-link" data-toggle="modal" data-target="#networkshelp"><i class="mdi mdi-help-circle"></i></button>
+						<button type="button" class="btn btn-xs btn-link" data-toggle="modal" data-target="#networkdefinitions"><i class="mdi mdi-alpha-d-circle"></i></button>
 					</div>
 					{% endif %}
 					{% if field.name == "services" %}
 					<div class="pull-right">
 						<button type="button" class="btn btn-xs btn-link" data-toggle="modal" data-target="#serviceshelp"><i class="mdi mdi-help-circle"></i></button>
+						<button type="button" class="btn btn-xs btn-link" data-toggle="modal" data-target="#servicedefinitions"><i class="mdi mdi-alpha-d-circle"></i></button>
 					</div>
 					{% endif %}
 					{% if field.name == "terms" %}
@@ -78,6 +80,48 @@
         </div>
     </div>
 </form>
+
+
+<div class="modal" id="networkdefinitions" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+		<div class="pull-right">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+        <h5 class="modal-title">Network Definitions</h5>
+      </div>
+		<table class="table table-hover modal-body">
+		{% for _, item in object.build_base_naming.networks.items %}
+		<tr><td>{{ item.name }}</td><td>{{ item.items | join:"<br>"}}</td></tr>
+		{% endfor %}
+		</table>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="servicedefinitions" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+		<div class="pull-right">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+        <h5 class="modal-title">Service Definitions</h5>
+      </div>
+		<table class="table table-hover modal-body">
+		{% for _, item in object.build_base_naming.services.items %}
+		<tr><td>{{ item.name }}</td><td>{{ item.items | join:"<br>"}}</td></tr>
+		{% endfor %}
+		</table>
+    </div>
+  </div>
+</div>
+
 <div class="modal" id="networkshelp" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">

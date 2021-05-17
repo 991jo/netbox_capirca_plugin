@@ -29,27 +29,21 @@ class ACL(ChangeLoggedModel):
     services = models.TextField(blank=True)
     terms = models.TextField(blank=True)
 
-    static_definitions_dir = models.TextField()
     policy_template_path = models.TextField()
 
     name = models.CharField(max_length=255, unique=True, validators=[validate_slug])
 
     description = models.CharField(max_length=255, blank=True)
 
+    def build_base_naming(self):
+        return NamingWrapper(settings.PLUGINS_CONFIG["netbox_capirca_plugin"]["definitions_path"])
+
     def clean(self):
         super().clean()
 
         errors = dict()
 
-        # check that loading the static_definitions_dir works
-        if self.static_definitions_dir:
-            try:
-                naming = NamingWrapper(self.get_full_definitions_dir())
-            except Exception as e:
-                errors["static_definitions_dir"] = f"Could not verify the static definitions from { self.static_definitions_dir }: { e }"
-                raise ValidationError(errors)
-        else:
-            naming = NamingWrapper()  # initialize an empty NamingWrapper
+        naming = self.build_base_naming()
 
         # check that adding the network definitions works
         try:
@@ -82,19 +76,6 @@ class ACL(ChangeLoggedModel):
             errors["terms"] = f"Error while parsing policy: { e }"
             raise ValidationError(errors)
 
-    def get_full_definitions_dir(self) -> str:
-        """
-        Returns the complete definitions directory consisting of the base
-        path and the appropriate extension.
-
-        Raises an BasePathEscapeError when the path tries to leave the base
-        path.
-        """
-
-        base_path = Path(settings.PLUGINS_CONFIG["netbox_capirca_plugin"]["definitions_base_path"])
-
-        return combine_paths_checked(base_path, Path(self.static_definitions_dir))
-
     def get_full_policy_template_path(self) -> str:
         """
         Returns the complete policy template path consisting of the base
@@ -115,7 +96,7 @@ class ACL(ChangeLoggedModel):
         target: the name of the capirca target
         """
 
-        naming = NamingWrapper(self.get_full_definitions_dir())
+        naming = self.build_base_naming()
         naming.add_definitions(self.networks, "networks")
         naming.add_definitions(self.services, "services")
 

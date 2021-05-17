@@ -1,4 +1,4 @@
-__version__ = "1.0.6"
+__version__ = "1.0.8"
 
 from extras.plugins import PluginConfig
 
@@ -13,9 +13,8 @@ class NetboxACLPluginConfig(PluginConfig):
     required_settings = []
     base_url = "netbox_capirca_plugin"
     default_settings = {}
-    required_settings = ["default_definitions_path",
-                         "default_policy_template",
-                         "definitions_base_path",
+    required_settings = ["default_policy_template",
+                         "definitions_path",
                          "policy_base_path"]
 
 
