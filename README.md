@@ -5,7 +5,7 @@ This plugin tries to implement a simple abstraction for Access Control Lists
 
 ACLs are generated from multiple data sources.
 
-- directories that contain static network and service definitions
+- a directory that contain static network and service definitions
 - jinja2 templates for policies
 - per ACL network and service definitions
 - terms that are put into the policy template
@@ -29,7 +29,7 @@ generator is relativly easy.
 Install the package in your netbox environment. How to do this depends on
 the way you habe build your netbox environment.
 
-Create directories for your capirca network and service definitions and
+Create a directory for your capirca network and service definitions and
 policy templates.
 
 # Configuration
@@ -42,9 +42,7 @@ PLUGINS = ["netbox_capirca_plugin"]
 This plugin has there configuration parameters:
 
 * `policy_base_path` - The directory in which the policies are
-* `definitions_base_path` - The directory where the definitions are
-* `default_definitions_path` - The default path for static network and service
-  definitions (relative to `definitions_base_path`)
+* `definitions_path` - The directory where the definitions are
 * `default_policy_template` - The default template for policies (relative to
   `policy_base_path`)
 
@@ -53,10 +51,9 @@ In the configuration this looks e.g. like this
 ```
 PLUGINS_CONFIG = {
     'netbox_capirca_plugin': {
-        'default_definitions_path': 'defs/',
         'default_policy_template': 'main.pol.j2',
         'policy_base_path': '/opt/capirca/policies/',
-        'definitions_base_path': '/opt/capirca/',
+        'definitions_path': '/opt/capirca/defs',
     }
 }
 ```

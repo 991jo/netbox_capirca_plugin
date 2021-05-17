@@ -17,5 +17,4 @@ class ACLTable(BaseTable):
         fields = ["pk",
                   "name",
                   "description",
-                  "static_definitions_dir",
                   "policy_template_path"]
