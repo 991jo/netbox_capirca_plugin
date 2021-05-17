@@ -1,6 +1,6 @@
 import django_filters
 
-from .models import ACL
+from .models import ACL, ACLInterfaceAssignment
 
 
 class ACLFilter(django_filters.FilterSet):
@@ -15,3 +15,10 @@ class ACLFilter(django_filters.FilterSet):
 
         fields = ["name", "description", "static_definitions_dir",
                   "policy_template_path"]
+
+class ACLInterfaceAssignmentFilter(django_filters.FilterSet):
+
+    class Meta:
+        model = ACLInterfaceAssignment
+
+        fields = ["interface_id", "ingress", "egress"]

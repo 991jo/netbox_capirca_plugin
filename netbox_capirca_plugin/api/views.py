@@ -36,3 +36,4 @@ class ACLViewSet(ModelViewSet):
 class ACLInterfaceAssignmentViewSet(ModelViewSet):
     queryset = ACLInterfaceAssignment.objects.all()
     serializer_class = ACLInterfaceAssignmentSerializer
+    filterset_class = filters.ACLInterfaceAssignmentFilter
