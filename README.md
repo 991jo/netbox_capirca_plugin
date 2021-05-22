@@ -1,7 +1,7 @@
-# Netbox ACL Plugin
+# NetBox Capirca Plugin
 
 This plugin tries to implement a simple abstraction for Access Control Lists
-(ACLs) in netbox by leveraging the capirca ACL abstraction.
+(ACLs) in NetBox by leveraging the capirca ACL abstraction.
 
 ACLs are generated from multiple data sources.
 
@@ -26,15 +26,15 @@ generator is relativly easy.
 
 # Installation
 
-Install the package in your netbox environment. How to do this depends on
-the way you habe build your netbox environment.
+Install the package in your NetBox environment. How to do this depends on
+the way you have build your NetBox environment.
 
 Create a directory for your capirca network and service definitions and
 policy templates.
 
 # Configuration
 
-Add the plugin to the netbox config.
+Add the plugin to the NetBox config.
 ```
 PLUGINS = ["netbox_capirca_plugin"]
 ```
@@ -78,7 +78,7 @@ header {
 {{ acl.terms }}
 ```
 
-## Handling unique ACL names on cisco IOS
+## Handling unique ACL names for IPv4 and IPv6 on Cisco IOS
 
 Cisco ACL names have to be unique. This means that if there is an extended ACL
 called `foo` there can't be a IPv6 ACL called `foo`.
@@ -99,7 +99,7 @@ header {
 # API
 
 ACLs and ACLInterfaceAssignments can also be managed via the API. The API docs
-can be found where the regular Netbox API docs of your installation are. 
+can be found where the regular NetBox API docs of your installation are.
 
 # Data Flow
 
