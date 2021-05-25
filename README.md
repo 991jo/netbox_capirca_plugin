@@ -29,6 +29,11 @@ generator is relativly easy.
 Install the package in your NetBox environment. How to do this depends on
 the way you have build your NetBox environment.
 
+The easiest way is probably the installation via pip:
+```
+pip install netbox_capirca_plugin
+```
+
 Create a directory for your capirca network and service definitions and
 policy templates.
 

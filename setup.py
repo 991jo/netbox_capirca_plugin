@@ -5,7 +5,7 @@ with open('README.md') as f:
 
 setup(
     name='netbox_capirca_plugin',
-    version="1.0.8",
+    version="1.0.9",
     packages=find_packages(),
     url='https://github.com/991jo/netbox_capirca_plugin',
     author='Johannes Erwerle',
@@ -14,5 +14,6 @@ setup(
     include_package_data=True,
     zip_safe=False,
     long_description=readme,
-    install_requires=["capirca", "jinja2"]
+    install_requires=["capirca", "jinja2"],
+    long_description_content_type="text/markdown",
 )
