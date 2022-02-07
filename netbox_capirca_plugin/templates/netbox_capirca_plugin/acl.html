@@ -1,6 +1,12 @@
 {% extends "netbox_plugin_extensions/generic/object.html" %}
 {% load helpers %}
 
+{% block extra_controls %}
+<a href="{% url 'plugins:netbox_capirca_plugin:acl_render' pk=object.pk %}" class="btn btn-sm btn-primary" role="button">
+    <span class="mdi mdi-brush" aria-hidden="true">Render</span>
+</a>
+{% endblock %}
+
 
 {% block content %}
 <div class="row">
