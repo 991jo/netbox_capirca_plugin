@@ -12,6 +12,8 @@ from .forms import (ACLFilterForm, ACLForm, ACLRenderForm,
 from .filters import ACLFilter
 from .models import ACL, ACLInterfaceAssignment
 
+from utilities.views import GetReturnURLMixin
+
 from netbox_plugin_extensions.views import generic
 
 
@@ -29,7 +31,7 @@ class ACLView(generic.PluginObjectView):
     queryset = ACL.objects.all()
 
 
-class ACLCreateView(generic.PluginObjectEditView):
+class ACLCreateView(CreateView, PermissionRequiredMixin, GetReturnURLMixin):
     queryset = ACL.objects.all()
     model_form = ACLForm
     form_class = ACLForm
