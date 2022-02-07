@@ -22,15 +22,16 @@ class ACLViewSet(ModelViewSet):
         target = request.GET.get("target", None)
         options = request.GET.get("options", "")
         if target is None:
-            return Response("required parameter 'target' is missing.", status.HTTP_400_BAD_REQUEST)
+            return Response("required parameter 'target' is missing.",
+                            status.HTTP_400_BAD_REQUEST)
 
         try:
             result = str(acl.render(target, options))
-        except UnsupportedTarget as e:
-            return Response(f"target { target } is not supported", status.HTTP_400_BAD_REQUEST)
+        except UnsupportedTarget:
+            return Response(f"target { target } is not supported",
+                            status.HTTP_400_BAD_REQUEST)
 
         return Response(result, status.HTTP_200_OK)
-
 
 
 class ACLInterfaceAssignmentViewSet(ModelViewSet):
