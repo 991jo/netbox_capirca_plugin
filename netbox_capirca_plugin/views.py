@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import render, get_object_or_404
 from django_tables2 import RequestConfig
 from django.conf import settings
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from .tables import ACLTable
 from .forms import (ACLFilterForm, ACLForm, ACLRenderForm,
@@ -28,9 +29,11 @@ class ACLView(generic.PluginObjectView):
     queryset = ACL.objects.all()
 
 
-class ACLCreateView(CreateView):
+class ACLCreateView(generic.PluginObjectEditView):
+    queryset = ACL.objects.all()
+    model_form = ACLForm
     form_class = ACLForm
-    #template_name = "netbox_capirca_plugin/acl_edit.html"
+    template_name = "netbox_capirca_plugin/acl_edit.html"
 
     def get_initial(self):
         config = settings.PLUGINS_CONFIG["netbox_capirca_plugin"]
@@ -47,7 +50,9 @@ class ACLDeleteView(generic.PluginObjectDeleteView):
     queryset = ACL.objects.all()
 
 
-class ACLRenderView(View):
+class ACLRenderView(View, PermissionRequiredMixin):
+
+    permission_requiered = "netbox_capirca_plugin.view_acl"
 
     queryset = ACL.objects.all()
 

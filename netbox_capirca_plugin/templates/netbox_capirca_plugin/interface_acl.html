@@ -1,7 +1,6 @@
 <div class="card">
 	<h5 class="card-header">Interface ACLs</h5>
 		<div class="card-body">
-			{{ interface_acl.pk }}
 		{% if interface_acl %}
 			<table class="table table-hover panel-body attr-table">
 				<tr>
@@ -26,12 +25,12 @@
 				</tr>
 			</table>
 			<div class="pull-right">
-				<a href="{% url 'plugins:netbox_capirca_plugin:acl_interface_assignment_edit' pk=interface_acl.pk %}" class="btn btn-warning"><i class="mdi mdi-pencil"></i>Edit</a>
+				{% if perms.netbox_capirca_plugin.edit_acl_interface_assignment %}<a href="{% url 'plugins:netbox_capirca_plugin:acl_interface_assignment_edit' pk=interface_acl.pk %}" class="btn btn-warning"><i class="mdi mdi-pencil"></i>Edit</a>{% endif %}
 			</div>
 		{% else %}
 			No Interface ACLs assigned.
 			<div class="pull-right">
-				<a href="{% url 'plugins:netbox_capirca_plugin:acl_interface_assignment_add' %}?interface_id={{ object.pk }}" class="btn btn-warning"><i class="mdi mdi-plus-thick"></i>Add</a>
+				{% if perms.netbox_capirca_plugin.add_acl_interface_assignment %}<a href="{% url 'plugins:netbox_capirca_plugin:acl_interface_assignment_add' %}?interface_id={{ object.pk }}" class="btn btn-warning"><i class="mdi mdi-plus-thick"></i>Add</a>{% endif %}
 			</div>
 		{% endif %}
 
