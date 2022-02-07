@@ -37,6 +37,11 @@ pip install netbox_capirca_plugin
 Create a directory for your capirca network and service definitions and
 policy templates.
 
+# Compatibility
+
+To be compatible with NetBox 3 version 2 of this plugin is required.
+Version 1 only supports NetBox 2.
+
 # Configuration
 
 Add the plugin to the NetBox config.

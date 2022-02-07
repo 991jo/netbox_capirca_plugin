@@ -1,4 +1,4 @@
-__version__ = "1.0.9"
+__version__ = "2.0.0"
 
 from extras.plugins import PluginConfig
 
@@ -17,30 +17,5 @@ class NetboxACLPluginConfig(PluginConfig):
     required_settings = ["default_policy_template",
                          "definitions_path",
                          "policy_base_path"]
-
-
-# try:
-#     from importlib.metadata import metadata
-# except ModuleNotFoundError:
-#     from importlib_metadata import metadata
-# 
-# plugin = metadata('netbox_plugin_extensions')
-# 
-# 
-# class NetboxPluginExtensions(PluginConfig):
-#     name = plugin.get('Name').replace('-', '_')
-#     verbose_name = plugin.get('Summary')
-#     description = plugin.get('Description')
-#     version = plugin.get('Version')
-#     author = plugin.get('Author')
-#     author_email = plugin.get('Author-email')
-#     base_url = 'netbox-plugin-extensions'
-#     min_version = '3.0'
-#     required_settings = []
-#     caching_config = {}
-#     default_settings = {}
-# 
-# 
-# config = NetboxPluginExtensions
 
 config = NetboxACLPluginConfig
