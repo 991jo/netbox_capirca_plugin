@@ -40,8 +40,13 @@ policy templates.
 # Configuration
 
 Add the plugin to the NetBox config.
+The [netbox_extensions_plugin](https://github.com/DanSheps/netbox-plugin-extensions)
+also needs to be loaded.
 ```
-PLUGINS = ["netbox_capirca_plugin"]
+PLUGINS = [
+	"netbox_capirca_plugin",
+	"netbox_extensions_plugin",
+]
 ```
 
 This plugin has there configuration parameters:
