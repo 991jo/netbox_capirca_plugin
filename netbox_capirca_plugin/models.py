@@ -4,6 +4,8 @@ from django.conf import settings
 from django.core.validators import validate_slug
 from django.urls import reverse
 
+from utilities.querysets import RestrictedQuerySet
+
 
 from typing import Callable
 from pathlib import Path
@@ -15,15 +17,12 @@ from capirca.lib.cisco import Cisco
 from capirca.lib.ciscoxr import CiscoXR
 from jinja2 import Template
 
-try:
-    from netbox.models import ChangeLoggedModel
-except ModuleNotFoundError:
-    from extras.models import ChangeLoggedModel
+from netbox_plugin_extensions.models import PluginChangeLoggedModel
 
 from dcim.models import Interface
 
 
-class ACL(ChangeLoggedModel):
+class ACL(PluginChangeLoggedModel):
 
     networks = models.TextField(blank=True)
     services = models.TextField(blank=True)
@@ -34,6 +33,8 @@ class ACL(ChangeLoggedModel):
     name = models.CharField(max_length=255, unique=True, validators=[validate_slug])
 
     description = models.CharField(max_length=255, blank=True)
+
+    objects = RestrictedQuerySet.as_manager()
 
     def build_base_naming(self):
         return NamingWrapper(settings.PLUGINS_CONFIG["netbox_capirca_plugin"]["definitions_path"])
@@ -131,7 +132,7 @@ class ACL(ChangeLoggedModel):
         return f"ACL { self.name }"
 
 
-class ACLInterfaceAssignment(ChangeLoggedModel):
+class ACLInterfaceAssignment(PluginChangeLoggedModel):
 
     interface = models.OneToOneField(Interface, on_delete=models.CASCADE)
     ingress = models.ForeignKey(ACL,
@@ -144,3 +145,9 @@ class ACLInterfaceAssignment(ChangeLoggedModel):
                                related_name="%(class)s_egress",
                                blank=True,
                                null=True)
+
+    objects = RestrictedQuerySet.as_manager()
+
+    def get_absolute_url(self):
+        return reverse("dcim:interface",
+                       kwargs={"pk": self.interface.pk})

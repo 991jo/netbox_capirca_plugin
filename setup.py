@@ -14,6 +14,11 @@ setup(
     include_package_data=True,
     zip_safe=False,
     long_description=readme,
-    install_requires=["capirca", "jinja2"],
+    install_requires=[
+        "capirca",
+        "jinja2",
+        "netbox-plugin-extensions>=1.1.0",
+        "importlib",
+        ],
     long_description_content_type="text/markdown",
 )

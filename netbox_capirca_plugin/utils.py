@@ -50,15 +50,16 @@ def combine_paths_checked(base: Path, extension: Path) -> str:
 
     raise BasePathEscapeError(f"{combined} is not a child of {base}")
 
+
 def cisco_acl_cleanup(acl: str) -> str:
     """
     Removes things that dont end up in the configuration file on cisco systems
     e.g. comments ("!"), "no ipv6 access-list ..." lines and empty lines.
     """
 
-    acl = acl.splitlines()
+    acl_lines = acl.splitlines()
     result = list()
-    for line in acl:
+    for line in acl_lines:
         if line.lstrip().startswith("!"):
             continue
         if line.lstrip().startswith("no "):

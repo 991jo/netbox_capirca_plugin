@@ -1,5 +1,5 @@
 from django.views.generic import View
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
 from django.shortcuts import render, get_object_or_404
 from django_tables2 import RequestConfig
@@ -11,57 +11,40 @@ from .forms import (ACLFilterForm, ACLForm, ACLRenderForm,
 from .filters import ACLFilter
 from .models import ACL, ACLInterfaceAssignment
 
+from netbox_plugin_extensions.views import generic
 
-class ACLListView(View):
+
+class ACLListView(generic.PluginObjectListView):
 
     queryset = ACL.objects.all()
     filterset = ACLFilter
     filterset_form = ACLFilterForm
-
-    def get(self, request):
-
-        self.queryset = self.filterset(request.GET, self.queryset).qs
-
-        table = ACLTable(self.queryset)
-        RequestConfig(request).configure(table)
-
-        return render(request,
-                      "netbox_capirca_plugin/acl_list.html",
-                      {"table": table,
-                       "filter_form": self.filterset_form(request.GET)})
+    table = ACLTable
+    action_buttons = ('add')
 
 
-class ACLView(View):
+class ACLView(generic.PluginObjectView):
 
     queryset = ACL.objects.all()
-
-    def get(self, request, pk):
-        acl_object = get_object_or_404(self.queryset, pk=pk)
-
-        return render(request,
-                      "netbox_capirca_plugin/acl.html",
-                      {"object": acl_object})
 
 
 class ACLCreateView(CreateView):
     form_class = ACLForm
-    template_name = "netbox_capirca_plugin/acl_edit.html"
+    #template_name = "netbox_capirca_plugin/acl_edit.html"
 
     def get_initial(self):
         config = settings.PLUGINS_CONFIG["netbox_capirca_plugin"]
         return {'policy_template_path': config["default_policy_template"]}
 
 
-class ACLEditView(UpdateView):
-    model = ACL
-    form_class = ACLForm
+class ACLEditView(generic.PluginObjectEditView):
+    model_form = ACLForm
+    queryset = ACL.objects.all()
     template_name = "netbox_capirca_plugin/acl_edit.html"
 
 
-class ACLDeleteView(DeleteView):
-    model = ACL
-    success_url = reverse_lazy("plugins:netbox_capirca_plugin:acl_list")
-    template_name = "netbox_capirca_plugin/acl_delete.html"
+class ACLDeleteView(generic.PluginObjectDeleteView):
+    queryset = ACL.objects.all()
 
 
 class ACLRenderView(View):
@@ -93,9 +76,10 @@ class ACLRenderView(View):
                       {"object": acl_object, "form": form})
 
 
-class ACLInterfaceAssignmentCreateView(CreateView):
-    form_class = ACLInterfaceAssignmentForm
-    template_name = "netbox_capirca_plugin/acl_interface_assignment_edit.html"
+class ACLInterfaceAssignmentCreateView(generic.PluginObjectEditView):
+    model_form = ACLInterfaceAssignmentForm
+    queryset = ACLInterfaceAssignment.objects.all()
+    #template_name = "netbox_capirca_plugin/acl_interface_assignment_edit.html"
 
     def get_interface_id(self):
         interface_id = self.request.GET.get("interface_id", None)
@@ -117,13 +101,15 @@ class ACLInterfaceAssignmentCreateView(CreateView):
         return super().form_valid(form)
 
 
-class ACLInterfaceAssignmentEditView(UpdateView):
-    model = ACLInterfaceAssignment
+class ACLInterfaceAssignmentEditView(generic.PluginObjectEditView):
     form_class = ACLInterfaceAssignmentForm
-    template_name = "netbox_capirca_plugin/acl_interface_assignment_edit.html"
+    queryset = ACLInterfaceAssignment.objects.all()
+    #template_name = "netbox_capirca_plugin/acl_interface_assignment_edit.html"
+    template_name = "generic/object_edit.html"
 
     def form_valid(self, form):
         interface = form.cleaned_data["interface"]
+        print(interface)
         self.success_url = reverse_lazy("dcim:interface", kwargs={"pk": interface.pk})
 
         return super().form_valid(form)
