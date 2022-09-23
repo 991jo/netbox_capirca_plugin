@@ -1,5 +1,7 @@
 # NetBox Capirca Plugin
 
+**This project is no longer maintained and does not work with current NetBox releases!**
+
 This plugin tries to implement a simple abstraction for Access Control Lists
 (ACLs) in NetBox by leveraging the capirca ACL abstraction.
 
